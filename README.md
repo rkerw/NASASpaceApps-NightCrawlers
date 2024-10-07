@@ -58,3 +58,5 @@ Automatic emails are sent out using SendGrid:
 ![image](https://github.com/user-attachments/assets/bf171a3f-0d78-44b3-86b0-be68b38da6a6)
 
 Stay tuned for future updates as we continue to develop and refine Project NightCrawlers!
+
+<img width="957" alt="image" src="https://github.com/user-attachments/assets/d4a08d6c-cb09-4197-aad9-8024c197e225">
