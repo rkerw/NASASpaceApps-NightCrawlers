@@ -12,8 +12,7 @@
 
 ---
 
-This is a copy of our original working repository, since the original one had secret API keys so it could successfully automatically deploy on our hosting site from GitHub directly. You can access the original repo [here](https://github.com/silvehh/NasaSpaceApps) by requesting access from Amro at amro.atique[at]spaceconcordia[dot]com.
-Navigate to [here](https://nasaspaceapps.up.railway.app/) to see a live version of our app!
+This is a copy of our original working repository, since the original one had secret API keys so it could successfully automatically deploy on our hosting site from GitHub directly. You can access the original repo [here](https://github.com/silvehh/NasaSpaceApps) by requesting access from Amro at amro.atique[at]spaceconcordia[dot]com. See a demo of our project [here](https://youtu.be/VnqZQn0md24) and navigate to [here](https://nasaspaceapps.up.railway.app/) to see a live version of our app!
 
 ---
 
