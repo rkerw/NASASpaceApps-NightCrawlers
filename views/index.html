@@ -1,0 +1,132 @@
+<html>
+  <head>
+    <title>NASA Space Apps</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=OUR_GOOGLE_MAPS_API_KEY&callback=initMap&libraries=maps,marker,places&v=beta&loading=async"
+      defer
+    ></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm navbar-absolute fixed-top bg-black shadow opacity-75" style="z-index:900;">
+      <div class="container-fluid px-5">
+        <a class="navbar-brand" href="/"><img src="/images/verylegallogo.png" style="height:50px"></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link text-primary" href="/credits">Credits</a>
+            </li>
+          </ul> 
+          <button id="geolocBtn" class="btn btn-outline-primary rounded-5 p-2 mx-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-crosshair" viewBox="0 0 16 16">
+              <path d="M8.5.5a.5.5 0 0 0-1 0v.518A7 7 0 0 0 1.018 7.5H.5a.5.5 0 0 0 0 1h.518A7 7 0 0 0 7.5 14.982v.518a.5.5 0 0 0 1 0v-.518A7 7 0 0 0 14.982 8.5h.518a.5.5 0 0 0 0-1h-.518A7 7 0 0 0 8.5 1.018zm-6.48 7A6 6 0 0 1 7.5 2.02v.48a.5.5 0 0 0 1 0v-.48a6 6 0 0 1 5.48 5.48h-.48a.5.5 0 0 0 0 1h.48a6 6 0 0 1-5.48 5.48v-.48a.5.5 0 0 0-1 0v.48A6 6 0 0 1 2.02 8.5h.48a.5.5 0 0 0 0-1zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+            </svg>
+          </button>
+          <form id="searchForm" class="d-flex mb-0">
+            <input id="pac-input" class="controls" type="text" placeholder="Search"/> 
+          </form>
+          <button id="offcnvToggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMoreInfo" class="btn btn-outline-primary rounded-5 p-2 mx-3" style="display: none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div id="customAlert" class="alert alert-warning alert-dismissible fade" role="alert">
+      Image is loading, please try again.
+      <button type="button" class="btn-close" aria-label="Close" onclick="hideAlert()"></button>
+    </div>
+
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasMoreInfo" aria-labelledby="MoreInfoPanel">
+      <div class="offcanvas-header" style="background-color: var(--bs-primary);">
+        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Info</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body" style="background-color: var(--bs-dark);">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview-tab" type="button">Overview</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#filter-tab" type="button">Filter Data</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div style="padding-top: 2%;">
+          <p class = "text-light mb-2"><small>Please note: if no data exists for the provided date and cloud cover values, default values of today's date and a cloud cover maximum of 100% will be used.</small></p>
+          </div>
+          <div class="tab-pane fade show active" id="overview-tab" role="tabpanel" aria-labelledby="overview-tab" tabindex="0" style="padding-top: 5%;">
+            <div class="row pt-2">
+            <div class="col-5">
+            <button class="btn btn-outline-primary" id="toggleImage" onclick="ImagetoggleFunction()">
+              Toggle Image
+            </button>
+            </div>
+            <div class="col-6">
+              <button class="btn btn-outline-primary" id="getGrid" onclick="togglegrid()">
+                Toggle grid
+              </button>
+            </div>  
+            </div>  
+            <div class="card text-light bg-dark mt-3">
+              <div class="card-body">
+                <h3 class="card-title mb-4" id ="metaTitleSingle" style="display: block;">Metadata</h3>
+                <h3 class="card-title mb-4" id="metaTitleGrid" style="display: none">Metadata for center image</h3>
+                <p class="card-text mb-2">Latitude: <span id="latitudeDisplay"></span></p>
+                <p class="card-text mb-2">Longitude: <span id="longitudeDisplay"></span></p>
+                <p class="card-text mb-2">Cloud coverage: <span id="CCDisplay"></span></p>
+                <p class="card-text mb-2">Image date: <span id="ImageDateDisplay"></span></p>
+              </div>
+            </div>    
+                  <div class="col mb-3" style="padding-top: 5%;">
+                    <form>
+                    <label for="userEmailField" class="form-label" style="color: white;">Notify me about this landsat pixel(s)</label>
+                    <input type="email" class="form-control" id="userEmailField" required>
+                    </form>
+                  </div>  
+                  <div class="col">
+                    <button class="btn btn-primary" id="userEmailSubmit" pinLat="" pinLng="" path ="" row ="" type="submit">Keep me updated!</button>
+                  </div>
+              </div>    
+          </div>
+          <div class="tab-pane fade" id="filter-tab" role="tabpanel" aria-labelledby="filter-tab" tabindex="1">
+            <form style="background-color: var(--bs-dark);">
+              <div class="row" style="padding-top: 15%;">
+                <div class="form-group col-6 pb-0 mb-4">
+                  <label for="startdate" class="form-label text-light">Start Date</label>
+                  <input id="startdate" type="date" class="form-control">
+                </div>
+                <div class="form-group col-6 pb-0 mb-4">
+                  <label for="enddate" class="form-label text-light">End Date</label>
+                  <input id="enddate" type="date" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col" style="padding-top: 7.5%;">
+                <label for="cloudCover" class="form-label text-light">Cloud Cover Threshold <span id="cloudValueText" class="text-light">15</span>%</label>
+                <input type="range" class="form-range" id="cloudCover" min="0" max="100" step="5" value="15">
+                <div style="padding-top: 7.5%;">
+                <button class="btn btn-outline-primary" id="getFilteredData" >
+                  Submit Data 
+                </button>
+                </div>
+              </div>
+
+            </form>  
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="map" style="height:100%; ">
+
+  <script src="/js/map.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="/js/email.js"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/dataFilter.js"></script>
+</body>
+</html>
